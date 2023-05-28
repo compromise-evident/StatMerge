@@ -8,7 +8,7 @@ Merge any models based on Byte count.
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e3c88c6341be0cb011b3fec8d8cdc828b41bb588bc676dc1abe7109221e235f6.png">
 </p>
 
-[Auditing in the browser?](https://coliru.stacked-crooked.com/a/e9fa6192eec1bd73)
+[Auditing in the browser?](https://coliru.stacked-crooked.com/a/056b002613dd30ed)
 
 <br>
 <br>
