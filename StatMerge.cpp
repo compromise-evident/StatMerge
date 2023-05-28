@@ -1,4 +1,4 @@
-/// StatMerge - merge any models based on Byte count.
+/// StatMerge - merge any models based on Byte occurrence.
 /// Nikolay Valentinovich Repnitskiy - License: WTFPLv2+ (wtfpl.net)
 
 
