@@ -5,7 +5,7 @@ Merge any models based on Byte count.
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_a48ce83193ae9371c17c7993f022eb4f64dacb4bc788cc43d844bb159f433d75.png">
+  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e3c88c6341be0cb011b3fec8d8cdc828b41bb588bc676dc1abe7109221e235f6.png">
 </p>
 
 [Auditing in the browser?](https://coliru.stacked-crooked.com/a/463308550afc2dd6)
