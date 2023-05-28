@@ -2,7 +2,7 @@
 /// Nikolay Valentinovich Repnitskiy - License: WTFPLv2+ (wtfpl.net)
 
 
-/* Version 1.0.0
+/* Version 2.0.0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Takes a folder with any files of equal size. Chop huge files for faster merging.
@@ -14,12 +14,51 @@ Takes a folder with any files of equal size. Chop huge files for faster merging.
 using namespace std;
 
 int main()
-{	ifstream in_stream;
-	ofstream out_stream;
+{	//                               user knobs
 	
-	//Top-occurring Bytes are final, else the smallest top-occurring Bytes.
-	//Recommended: at least 3 models.
-	//Recommended for low-end computers: 100MB models.
+	/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\  /////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    ////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\      ///////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\        //////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\            ////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\              ///////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\                  /////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\                      ///////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\                              ///////////////////////
+	\\\\\\\\\\\\\\\\\\                                        ////////////////*/
+	
+	
+	//                                                                                                                |
+	bool file_size_checking = true;   //DEFAULT = TRUE. Disable only for speed!                ~fatal if broken >     |
+	//                                                                                                                |
+	
+	
+	/*////////////////                                        \\\\\\\\\\\\\\\\\\
+	///////////////////////                              \\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////                      \\\\\\\\\\\\\\\\\\\\\\\\\\\
+	/////////////////////////////                  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////////              \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	////////////////////////////////            \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	//////////////////////////////////        \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////////////      \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	////////////////////////////////////    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	/////////////////////////////////////  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	//////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+	
+	/* Top-occurring Bytes are final, else the smallest top-occurring Bytes.
+	Recommended: at least 3 models.
+	Recommended for low-end computers: 100MB models.
+	
+	Gets distribution of 250kB segments from each file. So it keeps rereading
+	files. It would be nice to use longer segments to lessen rereadind but this
+	way, low-end devices can run it (eats ~512MB RAM.) ...For speed of course.
+	Also, static long long distribution[250000][256]; needed to be so small
+	because it's of type long long--supporting 10^18 files of size 10^18.
+	...Just because I don't like setting any real limits. */
+	
+	ifstream in_stream;
+	ofstream out_stream;
 	
 	//Gets path to FOLDER from user.
 	cout << "\nHave a FOLDER ready with n models of equal size."
@@ -82,8 +121,73 @@ int main()
 	
 	if(temp_garbage_byte != '\n') {number_of_files++;}
 	
+	//Checks if all files are of equal size. This entire if() can be removed.
+	if((file_size_checking == true) && (number_of_files > 1))
+	{	cout << "\nChecking file sizes...\n";
+		
+		//..........Copies a few things.
+		char COPY_path_to_file[10000];
+		for(int a = 0; a < 10000; a++) {COPY_path_to_file[a] = path_to_file[a];}
+		
+		int COPY_path_to_file_null_bookmark = path_to_file_null_bookmark;
+		COPY_path_to_file[COPY_path_to_file_null_bookmark] = '/';
+		COPY_path_to_file_null_bookmark++;
+		
+		//..........Runs through all files.
+		long long COPY_file_name_bytes_read_bookmark = -1;
+		long long size_of_first_file;
+		bool ran_once = false;
+		for(long long a = 0; a < number_of_files; a++)
+		{	//..........Loads COPY_path_to_file[] with file name.
+			in_stream.open("f");
+			COPY_file_name_bytes_read_bookmark++;
+			for(long long b = 0; b < COPY_file_name_bytes_read_bookmark; b++) {in_stream.get(garbage_byte);} //..........Skips name Bytes that have been read.
+			int COPY_path_to_file_write_bookmark = COPY_path_to_file_null_bookmark;
+			
+			in_stream.get(garbage_byte);
+			for(; garbage_byte != '\n';)
+			{	COPY_path_to_file[COPY_path_to_file_write_bookmark] = garbage_byte;
+				COPY_path_to_file_write_bookmark++;
+				COPY_file_name_bytes_read_bookmark++;
+				in_stream.get(garbage_byte);
+				
+				if(in_stream.eof() == true) {cout << "\nError 1\n"; return 0;}
+			}
+			in_stream.close();
+			
+			COPY_path_to_file[COPY_path_to_file_write_bookmark] = '\0';
+			
+			//..........Gets file size.
+			long long total_bytes = 0;
+			in_stream.open(COPY_path_to_file);
+			in_stream.get(garbage_byte);
+			for(; in_stream.eof() == false;)
+			{	in_stream.get(garbage_byte);
+				total_bytes++;
+			}
+			in_stream.close();
+			
+			//..........Compares file size.
+			if(ran_once == false) {size_of_first_file = total_bytes; ran_once = true;}
+			if(size_of_first_file != total_bytes)
+			{	cout << "\nFAILED! The following file is the first to be of\n"
+				     << "a different size compared to ALL files before it:\n" ;
+				
+				for(int a = 0; COPY_path_to_file[a] != '\0'; a++) {cout << COPY_path_to_file[a];}
+				
+				cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+				     << "\nSize of that file = " << total_bytes
+				     << "\nSizes prior to it = " << size_of_first_file
+				     << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
+				
+				remove("f");
+				return 0;
+			}
+		}
+	}
+	
 	//Begins.
-	cout << "\n";
+	if(file_size_checking == false) {cout << "\n";}
 	path_to_file[path_to_file_null_bookmark] = '/';
 	path_to_file_null_bookmark++;
 	bool looped_at_least_once = false;
@@ -137,8 +241,8 @@ int main()
 		}
 		
 		//..........Append-writes 250kB portion of file.
-		if(looped_at_least_once == false) {out_stream.open("RETRIEVED"          );}
-		else                              {out_stream.open("RETRIEVED", ios::app);}
+		if(looped_at_least_once == false) {out_stream.open("MERGED"          );}
+		else                              {out_stream.open("MERGED", ios::app);}
 		
 		for(int a = 0; a < 250000; a++)
 		{	long long byte_differences_discovered = 0;
