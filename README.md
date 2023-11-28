@@ -8,7 +8,7 @@ Merge any models or files of any quantity, based on Byte occurrence.
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e3c88c6341be0cb011b3fec8d8cdc828b41bb588bc676dc1abe7109221e235f6.png">
 </p>
 
-[Auditing in the browser?](https://coliru.stacked-crooked.com/a/056b002613dd30ed)
+[Auditing in the browser?](https://coliru.stacked-crooked.com/a/9da7cbe7d44141be)
 
 <br>
 <br>
