@@ -1,5 +1,5 @@
 <!--
-Merge any models based on Byte occurrence.
+Merge any models or files of any quantity, based on Byte occurrence.
 -->
 
 
