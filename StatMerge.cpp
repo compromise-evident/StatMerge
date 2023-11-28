@@ -28,11 +28,9 @@ int main()
 	\\\\\\\\\\\\\\\\\\\\\\\                              ///////////////////////
 	\\\\\\\\\\\\\\\\\\                                        ////////////////*/
 	
-	
 	//                                                                                                                |
 	bool file_size_checking = true;   //DEFAULT = TRUE. Disable only for speed!                ~fatal if broken >     |
 	//                                                                                                                |
-	
 	
 	/*////////////////                                        \\\\\\\\\\\\\\\\\\
 	///////////////////////                              \\\\\\\\\\\\\\\\\\\\\\\
@@ -186,6 +184,10 @@ int main()
 		}
 	}
 	
+	
+	
+	
+	
 	//Begins.
 	if(file_size_checking == false) {cout << "\n";}
 	path_to_file[path_to_file_null_bookmark] = '/';
@@ -283,14 +285,22 @@ int main()
 	}
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-TLDR: run C++
 
-apt install g++
-g++ /path/this_file.cpp
-/path/resulting_file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-How to run the program  -  Software package repositories for GNU+Linux operating
+
+
+
+/*#######*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*##########
+#####'`                                                                  `'#####
+###'                              TLDR: run it                              '###
+##                                                                            ##
+#,                                                                            ,#
+#'                              apt install g++                               '#
+##                           g++ /path/this_file.cpp                          ##
+###,                          /path/resulting_file                          ,###
+#####,.                                                                  .,#####
+##########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#######*/
+
+/*How to alter this code - Software package repositories for GNU+Linux operating
 systems have all the tools you can imagine. Open a terminal and use this command
 as root to install Geany and g++ on your computer: apt install geany g++   Geany
 is a fast & lightweight text editor and Integrated Development Environment where
@@ -312,5 +322,4 @@ and press enter.   a.out now resides in the user directory, you may rename it to
 anything.  To run that executable, simply drag and drop it into a terminal, then
 click on the terminal and press enter.  Reminder:  executable's effect-directory
 is /home/user or where you put the executable. Opening  .cpp  files in Geany and
-hitting  F9  creates the same executable--movable, renameable, drag & droppable.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+hitting F9 creates the same executable--movable, renameable, drag & droppable.*/
