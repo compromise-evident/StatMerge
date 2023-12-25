@@ -7,7 +7,7 @@ retrieve that file from all (possibly corrupted) copies.
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e3c88c6341be0cb011b3fec8d8cdc828b41bb588bc676dc1abe7109221e235f6.png">
+  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e42d22c3b406c1f48fff5b5f14be11923733929675f148a8dcb7283afb1942c2.png">
 </p>
 
 [Auditing in the browser?](https://coliru.stacked-crooked.com/a/d8158f64b4909bc5)
