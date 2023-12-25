@@ -1,5 +1,7 @@
 <!--
 Merge any models or files of any quantity, based on Byte occurrence.
+Or preserve any file by storing many copies, then let StatMerge
+retrieve that file from all (possibly corrupted) copies.
 -->
 
 
