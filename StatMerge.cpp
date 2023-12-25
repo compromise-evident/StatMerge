@@ -1,16 +1,18 @@
 /// StatMerge - merge any models or files of any quantity, based on Byte occurrence.
+///             Or preserve any file by storing many copies, then let StatMerge
+///             retrieve that file from all (possibly corrupted) copies.
 /// Nikolay Valentinovich Repnitskiy - License: WTFPLv2+ (wtfpl.net)
 
 
-/* Version 2.0.0
+/* Version 2.1.0
 #########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*##########
 #####'`                                                                  `'#####
-###'                                                                        '###
-##                                                                            ##
-#,                Takes a folder with any files of equal size.                ,#
-#'               Chop massive files equally for faster merging.               '#
-##                                                                            ##
-###,                                                                        ,###
+###'              Takes a folder with any files of equal size.              '###
+##               Chop massive files equally for faster merging.               ##
+#,                                                                            ,#
+#'       Top-occurring Bytes are final, else the smallest top-occurring.      '#
+##             Gets distribution of 250kB segments from each file.            ##
+###,                 Recommended: at least 3 (100MB) files.                 ,###
 #####,.                                                                  .,#####
 ##########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#######*/
 
@@ -19,55 +21,14 @@
 using namespace std;
 
 int main()
-{	//                               user knobs
-	
-	/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//////////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\  /////////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    ////////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\      ///////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\        //////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\            ////////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\              ///////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\                  /////////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\\\\\                      ///////////////////////////
-	\\\\\\\\\\\\\\\\\\\\\\\                              ///////////////////////
-	\\\\\\\\\\\\\\\\\\                                        ////////////////*/
-	
-	//                                                                                                                |
-	bool file_size_checking = true;   //DEFAULT = TRUE. Disable only for speed!                ~fatal if broken >     |
-	//                                                                                                                |
-	
-	/*////////////////                                        \\\\\\\\\\\\\\\\\\
-	///////////////////////                              \\\\\\\\\\\\\\\\\\\\\\\
-	///////////////////////////                      \\\\\\\\\\\\\\\\\\\\\\\\\\\
-	/////////////////////////////                  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	///////////////////////////////              \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	////////////////////////////////            \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	//////////////////////////////////        \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	///////////////////////////////////      \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	////////////////////////////////////    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	/////////////////////////////////////  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-	//////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
-	
-	/* Top-occurring Bytes are final, else the smallest top-occurring Bytes.
-	Recommended: at least 3 models.
-	Recommended for low-end computers: 100MB models.
-	
-	Gets distribution of 250kB segments from each file. So it keeps rereading
-	files. It would be nice to use longer segments to lessen rereadind but this
-	way, low-end devices can run it (eats ~512MB RAM.) ...For speed of course.
-	Also, static long long distribution[250000][256]; needed to be so small
-	because it's of type long long--supporting 10^18 files of size 10^18.
-	...Just because I don't like setting any real limits. */
-	
-	ifstream in_stream;
+{	ifstream in_stream;
 	ofstream out_stream;
 	
 	//Gets path to FOLDER from user.
-	cout << "\nHave a FOLDER ready with n models of equal size."
+	cout << "\nHave a FOLDER ready with n files of equal size."
 	     << "\nDrag & drop FOLDER into terminal or enter path:\n";
 	char  path_to_file[10000];
-	for(int a = 0; a < 10000; a++) {path_to_file[a] = '\0';} //Fills path_to_file[] with null.
+	for(int a = 0; a < 10000; a++) {path_to_file[a] = '\0';} //..........Fills path_to_file[] with null.
 	cin.getline(path_to_file, 10000);
 	if(path_to_file[0] == '\0') {cout << "\nNo path given.\n"; return 0;}
 	
@@ -95,8 +56,8 @@ int main()
 	
 	//Gets list of file names from given directory.
 	char ls[10000] = {"ls "};
-	for(int a = 0; path_to_file[a] != '\0'; a++) {ls[a + 3] = path_to_file[a];} //Appends given path.
-	ls[path_to_file_null_bookmark + 3] = ' '; //Appends commands.
+	for(int a = 0; path_to_file[a] != '\0'; a++) {ls[a + 3] = path_to_file[a];} //..........Appends given path.
+	ls[path_to_file_null_bookmark + 3] = ' '; //..........Appends commands.
 	ls[path_to_file_null_bookmark + 4] = '>';
 	ls[path_to_file_null_bookmark + 5] = ' ';
 	ls[path_to_file_null_bookmark + 6] = 'f';
@@ -122,79 +83,89 @@ int main()
 	}
 	in_stream.close();
 	
-	if(temp_garbage_byte != '\n') {number_of_files++;}
+	if(temp_garbage_byte != '\n') {number_of_files++                                                                      ;}
+	if(number_of_files < 2      ) {cout << "\nMust have 2 or more files to merge, preferably 3+.\n"; remove("f"); return 0;}
 	
-	//Checks if all files are of equal size. This entire if() can be removed.
-	if((file_size_checking == true) && (number_of_files > 1))
-	{	cout << "\nChecking file sizes...\n";
+	
+	
+	
+	
+	//This entire section can be removed.
+	//Checks if all files are of equal size.
+	cout << "\nChecking file sizes...\n";
+	char COPY_path_to_file[10000];
+	for(int a = 0; a < 10000; a++) {COPY_path_to_file[a] = path_to_file[a];}
+	
+	int COPY_path_to_file_null_bookmark = path_to_file_null_bookmark;
+	COPY_path_to_file[COPY_path_to_file_null_bookmark] = '/';
+	COPY_path_to_file_null_bookmark++;
+	
+	//..........Runs through all files.
+	long long COPY_file_name_bytes_read_bookmark = -1;
+	long long size_of_first_file;
+	long long total_bytes = 0;
+	bool ran_once = false;
+	for(long long a = 0; a < number_of_files; a++)
+	{	//..........Loads COPY_path_to_file[] with file name.
+		in_stream.open("f");
+		COPY_file_name_bytes_read_bookmark++;
+		in_stream.seekg(COPY_file_name_bytes_read_bookmark, std::ios::beg); //..........Skips name Bytes that have been read.
 		
-		//..........Copies a few things.
-		char COPY_path_to_file[10000];
-		for(int a = 0; a < 10000; a++) {COPY_path_to_file[a] = path_to_file[a];}
+		int COPY_path_to_file_write_bookmark = COPY_path_to_file_null_bookmark;
 		
-		int COPY_path_to_file_null_bookmark = path_to_file_null_bookmark;
-		COPY_path_to_file[COPY_path_to_file_null_bookmark] = '/';
-		COPY_path_to_file_null_bookmark++;
-		
-		//..........Runs through all files.
-		long long COPY_file_name_bytes_read_bookmark = -1;
-		long long size_of_first_file;
-		bool ran_once = false;
-		for(long long a = 0; a < number_of_files; a++)
-		{	//..........Loads COPY_path_to_file[] with file name.
-			in_stream.open("f");
+		in_stream.get(garbage_byte);
+		for(; garbage_byte != '\n';)
+		{	COPY_path_to_file[COPY_path_to_file_write_bookmark] = garbage_byte;
+			COPY_path_to_file_write_bookmark++;
 			COPY_file_name_bytes_read_bookmark++;
-			for(long long b = 0; b < COPY_file_name_bytes_read_bookmark; b++) {in_stream.get(garbage_byte);} //..........Skips name Bytes that have been read.
-			int COPY_path_to_file_write_bookmark = COPY_path_to_file_null_bookmark;
-			
 			in_stream.get(garbage_byte);
-			for(; garbage_byte != '\n';)
-			{	COPY_path_to_file[COPY_path_to_file_write_bookmark] = garbage_byte;
-				COPY_path_to_file_write_bookmark++;
-				COPY_file_name_bytes_read_bookmark++;
-				in_stream.get(garbage_byte);
-				
-				if(in_stream.eof() == true) {cout << "\nError 1\n"; return 0;}
-			}
-			in_stream.close();
 			
-			COPY_path_to_file[COPY_path_to_file_write_bookmark] = '\0';
+			if(in_stream.eof() == true) {cout << "\nError 1\n"; return 0;}
+		}
+		in_stream.close();
+		
+		COPY_path_to_file[COPY_path_to_file_write_bookmark] = '\0';
+		
+		//..........Gets file size.
+		total_bytes = 0;
+		in_stream.open(COPY_path_to_file);
+		in_stream.get(garbage_byte);
+		for(; in_stream.eof() == false;)
+		{	in_stream.get(garbage_byte);
+			total_bytes++;
+		}
+		in_stream.close();
+		
+		//..........Compares file size.
+		if(ran_once == false) {size_of_first_file = total_bytes; ran_once = true;}
+		if(size_of_first_file != total_bytes)
+		{	cout << "\nFAILED! The following file is the first to be of\n"
+			     << "a different size compared to ALL files before it:\n" ;
 			
-			//..........Gets file size.
-			long long total_bytes = 0;
-			in_stream.open(COPY_path_to_file);
-			in_stream.get(garbage_byte);
-			for(; in_stream.eof() == false;)
-			{	in_stream.get(garbage_byte);
-				total_bytes++;
-			}
-			in_stream.close();
+			for(int a = 0; COPY_path_to_file[a] != '\0'; a++) {cout << COPY_path_to_file[a];}
 			
-			//..........Compares file size.
-			if(ran_once == false) {size_of_first_file = total_bytes; ran_once = true;}
-			if(size_of_first_file != total_bytes)
-			{	cout << "\nFAILED! The following file is the first to be of\n"
-				     << "a different size compared to ALL files before it:\n" ;
-				
-				for(int a = 0; COPY_path_to_file[a] != '\0'; a++) {cout << COPY_path_to_file[a];}
-				
-				cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-				     << "\nSize of that file = " << total_bytes
-				     << "\nSizes prior to it = " << size_of_first_file
-				     << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
-				
-				remove("f");
-				return 0;
-			}
+			cout << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+			     << "\nSize of that file = " << total_bytes
+			     << "\nSizes prior to it = " << size_of_first_file
+			     << "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n";
+			
+			remove("f");
+			return 0;
 		}
 	}
 	
+	cout << "Merging " << number_of_files << " files, each " << total_bytes << " Bytes...\n";
 	
 	
 	
 	
-	//Begins.
-	if(file_size_checking == false) {cout << "\n";}
+	
+	/*####*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*######
+	##'                                         '##
+	#                   Begins.                   #
+	#                                             #
+	##,                                         ,##
+	####*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*##*/
 	path_to_file[path_to_file_null_bookmark] = '/';
 	path_to_file_null_bookmark++;
 	bool looped_at_least_once = false;
@@ -215,7 +186,7 @@ int main()
 		{	//..........Loads path_to_file[] with file name.
 			in_stream.open("f");
 			file_name_bytes_read_bookmark++;
-			for(long long b = 0; b < file_name_bytes_read_bookmark; b++) {in_stream.get(garbage_byte);} //..........Skips name Bytes that have been read.
+			in_stream.seekg(file_name_bytes_read_bookmark, std::ios::beg); //..........Skips name Bytes that have been read.
 			int path_to_file_write_bookmark = path_to_file_null_bookmark;
 			
 			in_stream.get(garbage_byte);
@@ -234,7 +205,7 @@ int main()
 			//..........Loads distribution[][]. 250kB are read from each file, and Byte occurrences are set. Next round is the next unread 250kB from each file.
 			int garbage_byte_normal;
 			in_stream.open(path_to_file);
-			for(long long b = 0; b < bytes_to_skip; b++) {in_stream.get(garbage_byte);}
+			in_stream.seekg(bytes_to_skip, std::ios::beg); //..........Skips FILE Bytes that have been read.
 			in_stream.get(garbage_byte);
 			for(int b = 0; in_stream.eof() == false; b++)
 			{	if(b == 250000) {break;}
@@ -264,10 +235,10 @@ int main()
 			
 			if(most_tallies == 0)
 			{	out_stream.close();
-				cout << "Done.\n\n";
 				
-				if(byte_differences_announced == 1) {cout <<                               "1 Byte difference reconciled.\n";}
-				else                                {cout << byte_differences_announced << " Byte differences reconciled.\n";}
+				if     (byte_differences_announced == 0) {cout << "\nDone! No Byte differences to reconcile.\n"                                ;}
+				else if(byte_differences_announced == 1) {cout << "\nDone! 1 Byte difference reconciled.\n"                                    ;}
+				else                                     {cout << "\nDone! " << byte_differences_announced << " Byte differences reconciled.\n";}
 				
 				remove("f");
 				return 0;
