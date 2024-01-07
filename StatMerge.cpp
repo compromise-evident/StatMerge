@@ -1,10 +1,10 @@
-/// StatMerge - merge any models or files of any quantity, based on Byte occurrence.
-///             Or preserve any file by storing many copies, then let StatMerge
-///             retrieve that file from all (possibly corrupted) copies.
-/// Nikolay Valentinovich Repnitskiy - License: WTFPLv2+ (wtfpl.net)
+/// StatMerge - merge any models or files of any quantity, based on
+///             Byte occurrence. Or preserve any file by storing
+///             many copies, then let StatMerge retrieve that
+///             file from all (possibly corrupted) copies.
 
 
-/* Version 2.1.0
+/* Version 2.1.1
 #########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*##########
 #####'`                                                                  `'#####
 ###'              Takes a folder with any files of equal size.              '###
@@ -27,20 +27,59 @@ int main()
 	//Gets path to FOLDER from user.
 	cout << "\nHave a FOLDER ready with n files of equal size."
 	     << "\nDrag & drop FOLDER into terminal or enter path:\n";
-	char  path_to_file[10000];
-	for(int a = 0; a < 10000; a++) {path_to_file[a] = '\0';} //..........Fills path_to_file[] with null.
-	cin.getline(path_to_file, 10000);
-	if(path_to_file[0] == '\0') {cout << "\nNo path given.\n"; return 0;}
 	
-	//Fixes path to file if drag & dropped (removes single quotes for ex:)   '/home/nikolay/my documents/'
-	if(path_to_file[0] == '\'')
-	{	for(int a = 0; a < 10000; a++)
-		{	path_to_file[a] = path_to_file[a + 1];
-			if(path_to_file[a] == '\'')
-			{	path_to_file[a    ] = '\0';
-				path_to_file[a + 1] = '\0';
-				path_to_file[a + 2] = '\0';
+	//..........Gets path then fixes it if drag-n-dropped, regardless of single-quote presence and "enter"
+	//..........not being cleared, meaning you can have options before this, where the user presses enter.
+	char path_to_file[10000] = {'\0'};
+	{	for(int a = 0; a < 10000; a++) {path_to_file[a] = '\0';}
+		cin.getline(path_to_file, 10000);
+		if(path_to_file[0] == '\0')
+		{	for(int a = 0; a < 10000; a++) {path_to_file[a] = '\0';}
+			cin.getline(path_to_file, 10000);
+		}
+		if(path_to_file[0] == '\0') {cout << "\nNo path given.\n"; return 0;}
+		
+		//..........Removes last space in path_to_file[].
+		bool existence_of_last_space = false;
+		for(int a = 9999; a > 0; a--)
+		{	if(path_to_file[a] != '\0')
+			{	if(path_to_file[a] == ' ') {path_to_file[a] = '\0'; existence_of_last_space = true;}
 				break;
+			}
+		}
+		
+		//..........Removes encapsulating single-quotes in path_to_file[].
+		bool existence_of_encapsulating_single_quotes = false;
+		if(path_to_file[0] == '\'')
+		{	for(int a = 0; a < 9999; a++)
+			{	path_to_file[a] = path_to_file[a + 1];
+				if(path_to_file[a] == '\0') 
+				{	if(path_to_file[a - 1] != '\'') {cout << "\nBad path.\n"; return 0;}
+					path_to_file[a - 1] = '\0';
+					existence_of_encapsulating_single_quotes = true;
+					break;
+				}
+			}
+		}
+		
+		//..........Replaces all "'\''" with "'" in path_to_file[].
+		int single_quote_quantity = 0;
+		for(int a = 0; a < 10000; a++)
+		{	if(path_to_file[a] == '\'') {single_quote_quantity++;}
+		}
+		
+		if((single_quote_quantity                     >    0)
+		&& (existence_of_last_space                  == true)
+		&& (existence_of_encapsulating_single_quotes == true))
+		{	if((single_quote_quantity % 3) != 0) {cout << "\nBad path.\n"; return 0;}
+			
+			for(int a = 0; a < 9997; a++)
+			{	if(path_to_file[a] == '\'')
+				{	int temp = (a + 1);
+					for(; temp < 9997; temp++)
+					{	path_to_file[temp] = path_to_file[temp + 3];
+					}
+				}
 			}
 		}
 	}
