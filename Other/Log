@@ -1,0 +1,33 @@
+StatMerge
+
+
+
+Version 2.1.1   Universal drag-n-drop; gets path then fixes it if drag-n-dropped
+                regardless of single-quote presence & "enter" not being cleared,
+                meaning you can have options before it where user presses enter.
+                Jan 6 2024
+
+Version 2.1.0   47% faster merging. Overkillintegrity now merged with StatMerge.
+                When skipping  bytes that have  already been read,  it no longer
+                reads them, but seeks to the wanted position or the  next unread
+                byte, or whatever in_stream.seekg(bytes_to_skip, std::ios::beg);
+                really does under the hoodie, where  bytes_to_skip  is quantity.
+                (It's actually a suspicious itility;  there is probably metadata
+                to be read about the file  lay-out  in order to move  read-head.
+                See, it's presumably faster to seek from cur or current position
+                hoverer, StatMerge cycles through files constantly,  so I'd have
+                to have multi in_stream() unclosing to  gain speed not obvious.)
+                File size-checking is ON by def (the section is still completely
+                removable as usual.) Other improvements, small stuff,aesthetics.
+                Dec 25 2023
+
+Version 2.0.0   Checks file sizes by default before merging.
+                May 28 2023
+
+Version 1.0.0   So merging of models is of serious consideration for distributed
+                learning. My  Overkillintegrity  project is perfect for that but
+                because I meant it for file preservation, people might have some
+                trouble realizing OKI can  merge models and any files so here is
+                OKI with different wording and no differences of function at all
+                compared to OKI (Overkillintegrity.cpp.)
+                May 25 2023
