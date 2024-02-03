@@ -25,8 +25,7 @@ int main()
 	ofstream out_stream;
 	
 	//Gets path to FOLDER from user.
-	cout << "\nHave a FOLDER ready with n files of equal size."
-	     << "\nDrag & drop FOLDER into terminal or enter path:\n";
+	cout << "\nDrop/enter FOLDER with files of equal size:\n";
 	
 	//..........Gets path then fixes it if drag-n-dropped, regardless of single-quote presence and "enter"
 	//..........not being cleared, meaning you can have options before this, where the user presses enter.
@@ -275,9 +274,9 @@ int main()
 			if(most_tallies == 0)
 			{	out_stream.close();
 				
-				if     (byte_differences_announced == 0) {cout << "\nDone! No Byte differences to reconcile.\n"                                ;}
-				else if(byte_differences_announced == 1) {cout << "\nDone! 1 Byte difference reconciled.\n"                                    ;}
-				else                                     {cout << "\nDone! " << byte_differences_announced << " Byte differences reconciled.\n";}
+				if     (byte_differences_announced == 0) {cout << "\nDone! No Byte differences to reconcile.\n\n\n"                                ;}
+				else if(byte_differences_announced == 1) {cout << "\nDone! 1 Byte difference reconciled.\n\n\n"                                    ;}
+				else                                     {cout << "\nDone! " << byte_differences_announced << " Byte differences reconciled.\n\n\n";}
 				
 				remove("f");
 				return 0;
