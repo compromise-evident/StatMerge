@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_e42d22c3b406c1f48fff5b5f14be11923733929675f148a8dcb7283afb1942c2.png">
+  <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/Terminal_2a2c24eae143b3f4a2bfe468fb732cba.png">
 </p>
 
 <br>
