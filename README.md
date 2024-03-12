@@ -10,3 +10,8 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/What_it_does_b53a4b1452da928659635b21abd83f30418c241ee2af94802f0f30e151a99787.png">
 </p>
+
+<br>
+<br>
+
+For Byte average-based merging, set ```average_instead_of_occurrence``` to true.
