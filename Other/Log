@@ -2,6 +2,9 @@ StatMerge
 
 
 
+Version 2.2.0   2 modes: merge based on Byte averages or Byte occurrences.
+                Mar 11 2024
+
 Version 2.1.1   Universal drag-n-drop; gets path then fixes it if drag-n-dropped
                 regardless of single-quote presence & "enter" not being cleared,
                 meaning you can have options before it where user presses enter.
