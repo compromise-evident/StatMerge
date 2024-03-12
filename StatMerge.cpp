@@ -1,27 +1,41 @@
 /// StatMerge - merge any models or files of any quantity, based on             Run it: "apt install g++ geany". Open this in Geany. Hit F9 once. F5 to run.
-///             Byte occurrence. Or preserve any file by storing
-///             many copies, then let StatMerge retrieve that
-///             file from all (possibly corrupted) copies.
+///             Byte occurrence/average. Or preserve any file by
+///             storing copies. StatMerge can retrieve it
+///             from those copies even if corrupted.
 
 
-/* Version 2.1.1
-#########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*##########
-#####'`                                                                  `'#####
-###'              Takes a folder with any files of equal size.              '###
-##               Chop massive files equally for faster merging.               ##
-#,                                                                            ,#
-#'       Top-occurring Bytes are final, else the smallest top-occurring.      '#
-##             Gets distribution of 250kB segments from each file.            ##
-###,                 Recommended: at least 3 (100MB) files.                 ,###
-#####,.                                                                  .,#####
-##########*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#*#######*/
-
+// Version 2.2.0
 #include <fstream>
 #include <iostream>
 using namespace std;
-
 int main()
-{	ifstream in_stream;
+{	/*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\  /////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\    ////////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\      ///////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\        //////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\            ////////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\              ///////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\\\       your       /////////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\\\\\       controls       ///////////////////////////
+	\\\\\\\\\\\\\\\\\\\\\\\                              ///////////////////////
+	\\\\\\\\\\\\\\\\\\                                        ////////////////*/
+	
+	bool average_instead_of_occurrence = false; //DEFAULT = false. (Not for retrieving original from corrupted copies.)
+	
+	/*////////////////                                        \\\\\\\\\\\\\\\\\\
+	///////////////////////                              \\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////                      \\\\\\\\\\\\\\\\\\\\\\\\\\\
+	/////////////////////////////                  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////////              \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	////////////////////////////////            \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	//////////////////////////////////        \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	///////////////////////////////////      \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	////////////////////////////////////    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	/////////////////////////////////////  \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	//////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*/
+	
+	ifstream in_stream;
 	ofstream out_stream;
 	
 	//Gets path to FOLDER from user.
@@ -240,7 +254,7 @@ int main()
 			
 			path_to_file[path_to_file_write_bookmark] = '\0';
 			
-			//..........Loads distribution[][]. 250kB are read from each file, and Byte occurrences are set. Next round is the next unread 250kB from each file.
+			//..........Loads distribution[][]. 250kB are read from each file, and Byte occurrences are set. Next round is the next unread 250kB. From each file...
 			int garbage_byte_normal;
 			in_stream.open(path_to_file);
 			in_stream.seekg(bytes_to_skip, std::ios::beg); //..........Skips FILE Bytes that have been read.
@@ -261,25 +275,40 @@ int main()
 		else                              {out_stream.open("MERGED", ios::app);}
 		
 		for(int a = 0; a < 250000; a++)
-		{	long long byte_differences_discovered = 0;
-			long long most_tallies = 0;
-			int final_byte;
-			for(int b = 0; b < 256; b++)
-			{	if(distribution[a][b] !=            0) {byte_differences_discovered++                    ;}
-				if(distribution[a][b] >  most_tallies) {most_tallies = distribution[a][b]; final_byte = b;}
+		{	long long final_byte = 0;
+			
+			if(average_instead_of_occurrence == true)
+			{	long long number_of_items = 0;
+				for(int b = 0; b < 256; b++)
+				{	if(distribution[a][b] != 0)
+					{	number_of_items += distribution[a][b];
+						final_byte += ((b + 1) * distribution[a][b]);
+					}
+				}
+				
+				if(number_of_items == 0) {out_stream.close(); remove("f"); cout << "\nAveraging done!\n\n\n"; return 0;}
+				
+				final_byte /= number_of_items;
+				final_byte--;
 			}
-			
-			if(byte_differences_discovered > 1) {byte_differences_announced += (byte_differences_discovered - 1);}
-			
-			if(most_tallies == 0)
-			{	out_stream.close();
+			else
+			{	long long byte_differences_discovered = 0;
+				long long most_tallies = 0;
 				
-				if     (byte_differences_announced == 0) {cout << "\nDone! No Byte differences to reconcile.\n\n\n"                                ;}
-				else if(byte_differences_announced == 1) {cout << "\nDone! 1 Byte difference reconciled.\n\n\n"                                    ;}
-				else                                     {cout << "\nDone! " << byte_differences_announced << " Byte differences reconciled.\n\n\n";}
+				for(int b = 0; b < 256; b++)
+				{	if(distribution[a][b] !=            0) {byte_differences_discovered++                    ;}
+					if(distribution[a][b] >  most_tallies) {most_tallies = distribution[a][b]; final_byte = b;}
+				}
 				
-				remove("f");
-				return 0;
+				if(byte_differences_discovered > 1) {byte_differences_announced += (byte_differences_discovered - 1);}
+				
+				if(most_tallies == 0)
+				{	if     (byte_differences_announced == 0) {cout << "\nDone! No Byte differences to reconcile.\n\n\n"                                ;}
+					else if(byte_differences_announced == 1) {cout << "\nDone! 1 Byte difference reconciled.\n\n\n"                                    ;}
+					else                                     {cout << "\nDone! " << byte_differences_announced << " Byte differences reconciled.\n\n\n";}
+					
+					out_stream.close(); remove("f"); return 0;
+				}
 			}
 			
 			if(final_byte < 128) {out_stream.put(final_byte      );}
