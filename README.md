@@ -14,7 +14,7 @@
 <br>
 <br>
 
-# For Byte average-based merging
+# And for Byte average-based merging
 
 Set ```average_instead_of_occurrence``` to true.
 Thanks to the way averaging works, if each file begins with "model 23 = "
