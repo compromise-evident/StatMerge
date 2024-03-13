@@ -14,6 +14,8 @@
 <br>
 <br>
 
-For Byte average-based merging, set ```average_instead_of_occurrence``` to true.
-And thanks to the way averaging works, if each file begins with "model 23 = "
+# For Byte average-based merging
+
+Set ```average_instead_of_occurrence``` to true.
+Thanks to the way averaging works, if each file begins with "model 23 = "
 for example, the resulting file will also begin with that header.
