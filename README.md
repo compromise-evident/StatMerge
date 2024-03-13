@@ -18,4 +18,4 @@
 
 Set ```average_instead_of_occurrence``` to true.
 Thanks to the way averaging works, if each file begins with "model 23 = "
-for example, that header is carried over to the resulting file verbatim.
+for example, that header is carried over to the resulting file. Same for occurrence.
