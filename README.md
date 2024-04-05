@@ -17,5 +17,5 @@
 # And for Byte average-based merging
 
 Set ```average_instead_of_occurrence``` to true.
-Thanks to the way averaging works, if each file begins with "model 23 = "
+Thanks to the way averaging works, if each file begins with "model_23"
 for example, that header is carried over to the resulting file. Same for occurrence.
