@@ -1,4 +1,4 @@
-/// StatMerge - merge any models or files of any quantity, based on             Run it: "apt install g++ geany". Open this in Geany. Hit F9 once. F5 to run.
+/// StatMerge - merge any models or files of any quantity, based on             Run it: "apt install g++ geany". Open the .cpp in Geany. Hit F9 once. F5 to run.
 ///             Byte occurrence/average. Or preserve any file by
 ///             storing copies. StatMerge can retrieve it
 ///             from those copies even if corrupted.
