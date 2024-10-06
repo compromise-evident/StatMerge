@@ -22,7 +22,7 @@ That's right, you can merge PyTorch models stored as efficient full ASCII.
 Preferably, merge based on byte occurrence (default in StatMerge.cpp.)
 And preferably, merge models that are copies of one but trained in any way,
 or merge models that are snapshots of a model being updated forever.
-(This if fine because model training is nondeterministic by default.)
+(This is fine because model training is nondeterministic by default.)
 
 See, merging models that were initialized randomly then trained,
 leads to a model that appears random--exactly as useless as
