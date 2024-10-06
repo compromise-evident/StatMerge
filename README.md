@@ -16,7 +16,21 @@ Run it: ```apt install g++ geany```. Open the .cpp in Geany. Hit F9 once. F5 to 
 <br>
 <br>
 
-# And for Byte average-based merging
+## Merge PyTorch models (.pth)
+
+That's right, you can merge PyTorch models stored as efficient full ASCII.
+Preferably, merge based on byte occurrence.
+And preferably, merge models that are copies of one but are trained,
+or merge models that are snapshots of one model that is ever-improving.
+This if fine because model training is nondeterministic by default.
+Merge at least 50+ models at once.
+In my experience, such a merge results in a model unique to the 50,
+and whose usefulness is representative of the best-performing of those 50.
+
+<br>
+<br>
+
+## And for Byte average-based merging
 
 Set ```average_instead_of_occurrence``` to true.
 Thanks to the way averaging works, if each file begins with "model_23"
