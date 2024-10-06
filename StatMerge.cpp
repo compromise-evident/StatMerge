@@ -21,7 +21,8 @@ int main()
 	\\\\\\\\\\\\\\\\\\\\\\\                              ///////////////////////
 	\\\\\\\\\\\\\\\\\\                                        ////////////////*/
 	
-	bool average_instead_of_occurrence = false; //DEFAULT = false. (Not for retrieving original from corrupted copies.)
+	bool average_instead_of_occurrence = false; //DEFAULT = false.  (false means
+	//occurrence-based merging;  for retrieving original from corrupted copies.)
 	
 	/*////////////////                                        \\\\\\\\\\\\\\\\\\
 	///////////////////////                              \\\\\\\\\\\\\\\\\\\\\\\
