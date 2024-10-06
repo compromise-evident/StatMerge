@@ -20,9 +20,16 @@ Run it: ```apt install g++ geany```. Open the .cpp in Geany. Hit F9 once. F5 to 
 
 That's right, you can merge PyTorch models stored as efficient full ASCII.
 Preferably, merge based on byte occurrence.
-And preferably, merge models that are copies of one but are trained,
-or merge models that are snapshots of one model that is ever-improving.
-This if fine because model training is nondeterministic by default.
+And preferably, merge models that are copies of one but trained in any way,
+or merge models that are snapshots of a model that is ever-improving.
+(This if fine because model training is nondeterministic by default.)
+
+See, merging models that were initialized randomly then trained,
+leads to a model that appears random--exactly as useless as
+one initialized randomly and never trained.
+Instead, it appears effective to merge
+models whose many parameters
+are equal or close.
 Merge at least 50+ models at once.
 In my experience, such a merge results in a model unique to the 50,
 and whose usefulness is representative of the best-performing of those 50.
