@@ -19,9 +19,9 @@ Run it: ```apt install g++ geany```. Open the .cpp in Geany. Hit F9 once. F5 to 
 ## Merge PyTorch models (.pth)
 
 That's right, you can merge PyTorch models stored as efficient full ASCII.
-Preferably, merge based on byte occurrence.
+Preferably, merge based on byte occurrence (default in StatMerge.cpp.)
 And preferably, merge models that are copies of one but trained in any way,
-or merge models that are snapshots of a model that is ever-improving.
+or merge models that are snapshots of a model being updated forever.
 (This if fine because model training is nondeterministic by default.)
 
 See, merging models that were initialized randomly then trained,
