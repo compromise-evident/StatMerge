@@ -23,6 +23,8 @@ Preferably, merge based on byte occurrence (default in StatMerge.cpp.)
 And preferably, merge models that are copies of one but trained in any way,
 or merge models that are snapshots of a model being updated forever.
 (This is fine because model training is nondeterministic by default.)
+Make sure PyTorch creates models with names of equal length,
+else the models differ in size.
 
 See, merging models that were initialized randomly then trained,
 leads to a model that appears random--exactly as useless as
