@@ -35,17 +35,7 @@ are equal or close.
 Merge at least 50+ models at once.
 In my experience, such a merge results in a model unique to the 50,
 and whose usefulness is representative of the best-performing of those 50.
-
-<br>
-<br>
-
-## Merge model results (consensus of multiple models)
-
-My best MNIST score is 98.12% (correctness.)
-Except, none of my models actually scored this high.
-Instead, it was the consensus of 100 models.
-Their results.txt files were merged based on byte occurrence.
-One model was trained 100 times while each results.txt was saved elsewhere for later merging.
+Additionally, you can merge model results (get a consensus of multiple models.)
 
 <br>
 <br>
