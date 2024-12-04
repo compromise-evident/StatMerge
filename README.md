@@ -35,7 +35,7 @@ are equal or close.
 Merge at least 50+ models at once.
 In my experience, such a merge results in a model unique to the 50,
 and whose usefulness is representative of the best-performing of those 50.
-Additionally, you can merge model results (get a consensus of multiple models) for classes 0-9.
+Additionally, you can merge model results files (get a consensus of multiple models) for classes 0-9.
 
 <br>
 <br>
