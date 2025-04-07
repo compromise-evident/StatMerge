@@ -65,5 +65,4 @@ int main()
 		//Prints progress.
 		bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}
 	}
-	out_stream.close();
 }
