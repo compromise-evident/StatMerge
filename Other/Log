@@ -6,6 +6,7 @@ Version 3.0.0   3 times faster.  Multiple in-streams  in dynamic array (vector).
                 Complete rewrite, minimalist.  Merges bytes up to smallest file.
                 Safety;  n files allowed,  empty files too.  Merges as previous.
                 Removed user option for byte averages.  Modular, easy to modify.
+                No longer needs to check file sizes; merged up to smallest file.
                 2025_04_06 (Apr 6 2025)
 
 Version 2.2.0   2 modes: merge based on Byte averages or Byte occurrences.
