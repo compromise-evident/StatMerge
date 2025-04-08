@@ -7,6 +7,9 @@ Version 3.0.0   3 times faster.  Multiple in-streams  in dynamic array (vector).
                 Safety;  n files allowed,  empty files too.  Merges as previous.
                 Removed user option for byte averages.  Modular, easy to modify.
                 No longer needs to check file sizes; merged up to smallest file.
+                Note: doing  "long long occur[256] = {0};"   in the merging loop
+                is notably faster than declaring occur[256] beforehand & zeroing
+                it in the loop. This is due to g++ optimization! Always do this!
                 2025_04_06 (Apr 6 2025)
 
 Version 2.2.0   2 modes: merge based on Byte averages or Byte occurrences.
