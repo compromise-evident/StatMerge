@@ -2,6 +2,9 @@ StatMerge
 
 
 
+Version 4.0.0   Option to merge based on bit occurrence as well.
+                2025_04_08 (Apr 8 2025)
+
 Version 3.0.0   3 times faster.  Multiple in-streams  in dynamic array (vector).
                 Complete rewrite, minimalist.  Merges bytes up to smallest file.
                 Safety;  n files allowed,  empty files too.  Merges as previous.
