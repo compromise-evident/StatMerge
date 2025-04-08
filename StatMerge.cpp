@@ -1,7 +1,10 @@
-/*StatMerge - version 3.0.0                                                     Run it: "apt install g++ geany". Open the .cpp in Geany. Hit F9 once. F5 to run.
-Merge any files of any size & quantity based on most-occurring bytes.
-By merging copies of a file, you retrieve the original file,
-even as the copies become increasingly corrupted. */
+//YOUR CONTROLS:                                                                Run it: "apt install g++ geany". Open the .cpp in Geany. Hit F9 once. F5 to run.
+bool merge_based_on_bit_occurrence = true;
+
+/*StatMerge - version 4.0.0
+Merge any files of any size & quantity based on most-occurring bits
+or bytes. By merging copies of a file, you retrieve the original
+file, even as the copies become increasingly corrupted. */
 
 #include <fstream>
 #include <iostream>
@@ -41,18 +44,37 @@ int main()
 	in_stream.close();
 	if(ok == false) {return 0;} remove("f");
 	
-	//Merges all files.
-	int bytes_merged = 0; long long MB_merged = 0;
-	out_stream.open("MERGED");
-	for(;;)
-	{	long long occur[256] = {0};
-		for(long long a = 0; a < number_of_files; a++)
-		{	in_stream_n[a].get(file_byte); if(in_stream_n[a].eof() == true) {out_stream.close(); cout << "Done.\n"; return 0;}    //Gets byte from each file.
-			raw_byte = file_byte; if(raw_byte < 0) {raw_byte += 256;} occur[raw_byte]++;                                          //Tallies byte occurrence.
+	//Merges based on bit occurrence.
+	if(merge_based_on_bit_occurrence == true)
+	{	int bytes_merged = 0; long long MB_merged = 0;
+		out_stream.open("MERGED_based_on_bit_occurrence");
+		for(;;)
+		{	long long occur[8][2] = {0};
+			for(long long a = 0; a < number_of_files; a++)
+			{	in_stream_n[a].get(file_byte); if(in_stream_n[a].eof() == true) {out_stream.close(); cout << "Done.\n"; return 0;}       //Gets byte from each file.
+				raw_byte = file_byte; if(raw_byte < 0) {raw_byte += 256;} int place = 128;
+				for(int b = 0; b < 8; b++) {if(raw_byte >= place) {occur[b][1]++; raw_byte -= place;} else {occur[b][0]++;} place /= 2;} //Tallies bit occurrence.
+			}
+			bool binary[8] = {0}; for(int a = 0; a < 8; a++) {if(occur[a][1] >= occur[a][0]) {binary[a] = 1;}}                           //Gets  most-occurring bits.
+			raw_byte = 0; int place = 128; for(int a = 0; a < 8; a++) {if(binary[a] == 1) {raw_byte += place;} place /= 2;}              //Makes most-occurring byte.
+			if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                        //Saves most-occurring byte.
+			bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}          //Keeps you posted.
 		}
-		
-		long long most_occur = 0; for(int a = 0; a < 256; a++) {if(occur[a] > most_occur) {most_occur = occur[a]; raw_byte = a;}} //Gets  most-occurring byte.
-		if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                     //Saves most-occurring byte.
-		bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}       //Keeps you posted.
+	}
+	
+	//Merges based on byte occurrence.
+	else
+	{	int bytes_merged = 0; long long MB_merged = 0;
+		out_stream.open("MERGED_based_on_byte_occurrence");
+		for(;;)
+		{	long long occur[256] = {0};
+			for(long long a = 0; a < number_of_files; a++)
+			{	in_stream_n[a].get(file_byte); if(in_stream_n[a].eof() == true) {out_stream.close(); cout << "Done.\n"; return 0;}    //Gets byte from each file.
+				raw_byte = file_byte; if(raw_byte < 0) {raw_byte += 256;} occur[raw_byte]++;                                          //Tallies byte occurrence.
+			}
+			long long most_occur = 0; for(int a = 0; a < 256; a++) {if(occur[a] > most_occur) {most_occur = occur[a]; raw_byte = a;}} //Gets  most-occurring byte.
+			if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                     //Saves most-occurring byte.
+			bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}       //Keeps you posted.
+		}
 	}
 }
