@@ -9,7 +9,7 @@ Run it: ```apt install g++ geany```. Open the .cpp in Geany. Hit F9 once. F5 to 
 <br>
 <br>
 
-## Top-occurring Bytes are final, else the smallest top-occurring Bytes
+### Most-occurring bytes are final, else the smallest most-occurring bytes
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/main/Other/What_it_does_b53a4b1452da928659635b21abd83f30418c241ee2af94802f0f30e151a99787.png">
@@ -20,7 +20,7 @@ Merges bytes up to smallest file (merges until "end of file" is reached in any f
 <br>
 <br>
 
-## Merge PyTorch models (.pth)
+### Merge PyTorch models (.pth)
 
 That's right, you can merge PyTorch models.
 Preferably, merge models that are copies of one but trained in any way,
