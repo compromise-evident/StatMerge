@@ -56,8 +56,8 @@ int main()
 				for(int b = 0; b < 8; b++) {if(raw_byte >= place) {occur[b][1]++; raw_byte -= place;} else {occur[b][0]++;} place /= 2;} //Tallies bit occurrence.
 			}
 			bool binary[8] = {0}; for(int a = 0; a < 8; a++) {if(occur[a][1] >= occur[a][0]) {binary[a] = 1;}}                           //Gets  most-occurring bits.
-			raw_byte = 0; int place = 128; for(int a = 0; a < 8; a++) {if(binary[a] == 1) {raw_byte += place;} place /= 2;}              //Makes most-occurring byte.
-			if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                        //Saves most-occurring byte.
+			raw_byte = 0; int place = 128; for(int a = 0; a < 8; a++) {if(binary[a] == 1) {raw_byte += place;} place /= 2;}              //Turns them into byte.
+			if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                        //Saves that byte.
 			bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}          //Keeps you posted.
 		}
 	}
