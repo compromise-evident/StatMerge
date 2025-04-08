@@ -15,8 +15,6 @@ Run it: ```apt install g++ geany```. Open the .cpp in Geany. Hit F9 once. F5 to 
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/refs/heads/main/Other/What_it_does_with_bits.png">
 </p>
 
-Merges bytes up to smallest file (merges until "end of file" is reached in any file.)
-
 <br>
 <br>
 
@@ -26,7 +24,16 @@ Merges bytes up to smallest file (merges until "end of file" is reached in any f
   <img src="https://raw.githubusercontent.com/compromise-evident/StatMerge/refs/heads/main/Other/What_it_does_with_bytes.png">
 </p>
 
-Merges bytes up to smallest file (merges until "end of file" is reached in any file.)
+<br>
+<br>
+
+### Always merges bytes up to smallest file
+
+(Merges until "end of file" is reached in any file.)
+The cpp is modular and easy to work with. If you need
+to merge multi-byte items in files, simply make it read more
+bytes before looping to the next file;
+do ```in_stream_n[a].get(file_byte);``` multiple times.
 
 <br>
 <br>
