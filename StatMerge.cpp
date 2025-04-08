@@ -20,10 +20,8 @@ int main()
 	for(int a = 99999; a >= 0; a--) {if(path[a] != '\0') {if(path[a] == ' ') {path[a] = '\0';} break;}}
 	in_stream.open(path); if(in_stream.fail() == true) {cout << "\nNo path " << path << "\n"; return 0;} in_stream.close();
 	
-	//Saves filenames to file via ls command.
-	string ls = "ls "; ls += path; ls += " > f"; system(ls.c_str());
-	
 	//Gets number of files.
+	string ls = "ls "; ls += path; ls += " > f"; system(ls.c_str());
 	long long number_of_files = 0;
 	in_stream.open("f"); in_stream.get(file_byte);
 	for(; in_stream.eof() == false; in_stream.get(file_byte)) {if(file_byte == '\n') {number_of_files++;}}
@@ -44,25 +42,17 @@ int main()
 	if(ok == false) {return 0;} remove("f");
 	
 	//Merges all files.
-	out_stream.open("MERGED");
 	int bytes_merged = 0; long long MB_merged = 0;
+	out_stream.open("MERGED");
 	for(;;)
-	{	//Gets 1 byte from each file and tallies its occurrence.
-		long long occurrence_table[256] = {0};
+	{	long long occur[256] = {0};
 		for(long long a = 0; a < number_of_files; a++)
-		{	in_stream_n[a].get(file_byte); if(in_stream_n[a].eof() == true) {out_stream.close(); cout << "Done.\n"; return 0;}
-			raw_byte = file_byte; if(raw_byte < 0) {raw_byte += 256;} occurrence_table[raw_byte]++;
+		{	in_stream_n[a].get(file_byte); if(in_stream_n[a].eof() == true) {out_stream.close(); cout << "Done.\n"; return 0;}    //Gets byte from each file.
+			raw_byte = file_byte; if(raw_byte < 0) {raw_byte += 256;} occur[raw_byte]++;                                          //Tallies byte occurrence.
 		}
 		
-		//Gets most-occurring byte.
-		long long most_tallies = 0;
-		for(int a = 0; a < 256; a++) {if(occurrence_table[a] > most_tallies) {most_tallies = occurrence_table[a]; raw_byte = a;}}
-		
-		//Saves most-occurring byte.
-		if(raw_byte < 128) {out_stream.put(raw_byte      );}
-		else               {out_stream.put(raw_byte - 256);}
-		
-		//Prints progress.
-		bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}
+		long long most_occur = 0; for(int a = 0; a < 256; a++) {if(occur[a] > most_occur) {most_occur = occur[a]; raw_byte = a;}} //Gets  most-occurring byte.
+		if(raw_byte < 128) {out_stream.put(raw_byte);} else {out_stream.put(raw_byte - 256);}                                     //Saves most-occurring byte.
+		bytes_merged++; if(bytes_merged == 1000000) {bytes_merged = 0; MB_merged++; cout << MB_merged << "MB merged...\n";}       //Keeps you posted.
 	}
 }
