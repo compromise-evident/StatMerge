@@ -24,7 +24,7 @@ int main()
 	in_stream.open(path); if(in_stream.fail() == true) {cout << "\nNo path " << path << "\n"; return 0;} in_stream.close();
 	
 	//Gets number of files.
-	string ls = "ls "; ls += path; ls += " > f"; system(ls.c_str());
+	string ls = "ls -Av "; ls += path; ls += " > f"; system(ls.c_str());
 	long long number_of_files = 0;
 	in_stream.open("f"); in_stream.get(file_byte);
 	for(; in_stream.eof() == false; in_stream.get(file_byte)) {if(file_byte == '\n') {number_of_files++;}}
