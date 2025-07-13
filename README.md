@@ -47,6 +47,9 @@ or merge models that are snapshots of a model being updated forever.
 Make sure PyTorch creates models with names of equal length,
 else model size differs.
 
+<br>
+<br>
+
 ### DIY
 
-github.com/compromise-evident/WhatNot/blob/main/open_n_files_and_read_from_any.cpp
+https://github.com/compromise-evident/WhatNot/blob/main/open_n_files_and_read_from_any.cpp
