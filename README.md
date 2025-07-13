@@ -46,3 +46,7 @@ or merge models that are snapshots of a model being updated forever.
 (This is fine because PyTorch model training is nondeterministic by default.)
 Make sure PyTorch creates models with names of equal length,
 else model size differs.
+
+### DIY
+
+github.com/compromise-evident/WhatNot/blob/main/open_n_files_and_read_from_any.cpp
