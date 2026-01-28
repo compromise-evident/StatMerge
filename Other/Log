@@ -2,7 +2,13 @@ StatMerge
 
 
 
-Version 4.0.0   Option to merge based on bit occurrence as well.
+Version 4.0.0   Option to merge based on bit occurrence as well.  Bit merging is
+                faster, surprise!  Just tried (Jan 27 2026)  to combine multiple
+                in-streams with buffers and that was 4x slower. Buffers+multiple
+                in-streams may never be worth it to benchmark for big  qty/size.
+                Buffers tried for byte merging: 1MB, 100kB, 1kB. long long, int.
+                Bigger buffers were 4x slower,smaller ones were slightly slower.
+                By buffers, I mean reading 1MB from each file,  not just 1 byte.
                 2025_04_08 (Apr 8 2025)
 
 Version 3.0.0   3 times faster.  Multiple in-streams  in dynamic array (vector).
